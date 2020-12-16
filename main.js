@@ -14,12 +14,6 @@ var drag_coefficient = 0.99;
 var thrust_strength = 0.2;
 var turn_strength = 0.05; // radians 
 
-function drawTerrain(y) {
-	var ctx = canv.getContext("2d");
-	ctx.fillStyle = "beige";
-  ctx.fillRect(0, canv.height-y, canv.width, y);
-}
-
 function drawLose() {
 	var ctx = canv.getContext("2d");
 	ctx.fillStyle = "red";
@@ -33,7 +27,7 @@ function drawUI() {
 	ctx.font = '16px serif';
 
 	// Altitude from the bottom of the big circle to the ground
-	var altitude = (ship.y - r - terrain_height).toFixed(2);
+	var altitude = (ship.y - r - ground.height).toFixed(2);
 	ctx.fillText("Altitude: " + altitude, 10, 16);
 
 	// Fuel
@@ -53,6 +47,7 @@ var ctx = canv.getContext("2d");
 
 // Objects
 var ship = new Ship(200, 100, 0.5*Math.PI, starting_fuel, canv.getContext("2d"));
+var ground = new Terrain(terrain_height, canv, canv.getContext("2d"));
 
 // Extra handler for pause via "Space"
 window.addEventListener("keydown", function(e) {
@@ -76,13 +71,13 @@ function loop() {
 
   // Ground collision
   var need_drawLose = false;
-	if(ship.y-r <= terrain_height){
+	if(ship.y-r <= ground.height){
 		speed = Math.sqrt(ship.vx**2 + ship.vy**2);
 		if(speed > crash_speed) {
 			run = false;
 			need_drawLose = true;
 		} else {
-			ship.y = r + terrain_height; 
+			ship.y = r + ground.height; 
 			ship.vy = 0;
 		}
 	}
@@ -92,8 +87,8 @@ function loop() {
 	bpClearCanvas();
 
 	drawUI();
-	ship.draw()
-	drawTerrain(terrain_height);
+	ground.draw();
+	ship.draw();
 	if(need_drawLose) drawLose();
 }
 
