@@ -120,7 +120,8 @@ function testCollisionLine() {
 // c is the center of the circle, r is the radius
 // 1- Take the vector from the start of l1 to c
 // 2- Project this onto l1 to find the closest point to c, p_close
-// 3- The circle and line intersect if the radius is larger than the length
+// 3a- If p_close is not on the line, no intersect
+// 3b- The circle and line intersect if the radius is larger than the length
 // 		of [p_close, c]
 Terrain.prototype.collideLineCircle = function(l1, c, r) {
 	// l1[0] - c
@@ -134,6 +135,12 @@ Terrain.prototype.collideLineCircle = function(l1, c, r) {
 
 	// l1[0] + l1_vect_unit * (toCenter . l1_vect_unit)
   var p_close = vectorAdd(l1[0], vectorScale(l1_vect_unit, vectorDot(toCenter, l1_vect_unit)));
+
+	// p_close - l1[0]
+	var p_close_vect = vectorSub(p_close, l1[0]);
+	if(vectorDot(p_close_vect, p_close_vect) > vectorDot(l1_vect, l1_vect)){
+		return [false, undefined];
+	}
 
   // p_close - c
 	var vector_to_c = vectorSub(c, p_close);
