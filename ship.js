@@ -48,7 +48,7 @@ Ship.prototype.applyThrust = function(thrust) {
 	{
 		this.vx+= thrust*Math.cos(this.a);
 		this.vy+= thrust*Math.sin(this.a);
-		this.fuel-= 1;
+		if(!cheat) this.fuel-= 1;
 	}
 };
 

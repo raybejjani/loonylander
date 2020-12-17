@@ -7,6 +7,7 @@ var height = 400;
 var terrain_height = 20;
 var starting_fuel = 100;
 var crash_speed = 0.8;
+var cheat = false;
 
 // Physics
 var gravity = -0.01;
@@ -57,6 +58,8 @@ window.addEventListener("keydown", function(e) {
 		case "Space":
 			if(!run) window.requestAnimationFrame(loop);
 			run = !run;
+		case "KeyG":
+			cheat = !cheat;
 	}
 });
 
@@ -89,7 +92,7 @@ function loop() {
 		ship.vx += 1.1*v_speed[0];
 		ship.vy += 1.1*v_speed[1];
 
-		if(speed > crash_speed) {
+		if(!cheat && speed > crash_speed) {
 			run = false;
 			need_drawLose = true;
 		}
