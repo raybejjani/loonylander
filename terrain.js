@@ -150,11 +150,12 @@ Terrain.prototype.collideLineCircle = function(l1, c, r) {
 
 	// p_close - l1[0]
 	var p_close_vect = vectorSub(p_close, l1[0]);
+	if(vectorDot(p_close_vect, l1_vect) < 0) return [false, undefined];
 	if(vectorDot(p_close_vect, p_close_vect) > vectorDot(l1_vect, l1_vect)){
 		return [false, undefined];
 	}
 
-  // p_close - c
+  // c - p_close
 	var vector_to_c = vectorSub(c, p_close);
   return [r >= Math.sqrt(vectorDot(vector_to_c, vector_to_c)), vector_to_c];
 };
