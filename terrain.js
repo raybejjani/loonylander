@@ -5,13 +5,28 @@ function Terrain(height, canv, ctx) {
 	this.canv = canv;
 	this.ctx = ctx;
 	this.color = "beige";
-}
 
+	// start and end at height, create variation in between.
+	// We also include the bottom corners of the canvas.
+	this.coords = [[0,0], [0,this.height]];
+	for(var i=1; i<=10; i++) {
+		this.coords.push([i*this.canv.width/10, // 10 parts
+											0.5*(this.height + Math.random()*this.height)]);
+	}
+	this.coords.push([this.canv.width,this.height], [this.canv.width,0]);
+}
 
 
 Terrain.prototype.draw = function() {
 	this.ctx.fillStyle = this.color;
-  this.ctx.fillRect(0, this.canv.height-this.height, this.canv.width, this.height);
+	this.ctx.beginPath();
+	this.ctx.moveTo(0,this.canv.height);
+	for(var i in this.coords) {
+		var p = this.coords[i];
+		ctx.lineTo(p[0], this.canv.height-p[1]);
+	}
+	ctx.closePath();
+	ctx.fill();  
 }
 
 
