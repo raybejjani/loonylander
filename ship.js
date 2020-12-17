@@ -7,6 +7,9 @@ var ds = 15; // distance between the circles
 function Ship(x, y, a, fuel, ctx) {
 	this.fuel = fuel;
 
+	this.r = r;
+	this.rs = rs;
+
 	this.x = x;
 	this.y = y;
 	this.a = a;
@@ -18,6 +21,10 @@ function Ship(x, y, a, fuel, ctx) {
 	this.color = 'red';
 }
 
+
+Ship.prototype.getCenter = function() {
+	return [this.x,this.y];
+}
 
 Ship.prototype.draw = function() {
 	// Draw the big circle
@@ -47,13 +54,13 @@ Ship.prototype.applyThrust = function(thrust) {
 
 // runPhysics updates the position based on the current velocity after applying
 // drag and any velocity forcing functions (e.g. gravity).
-Ship.prototype.runPhysics = function(drag, dx, dy) {
-	ship.vx*= drag;
-	ship.vy*= drag;
+Ship.prototype.runPhysics = function(drag, ddx, ddy) {
+	this.vx*= drag;
+	this.vy*= drag;
 
-	ship.vx+= dx;
-	ship.vy+= dy;
+	this.vx+= ddx;
+	this.vy+= ddy;
 
-	ship.x+= ship.vx;
-	ship.y+= ship.vy;
+	this.x+= this.vx;
+	this.y+= this.vy;
 };

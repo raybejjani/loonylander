@@ -29,6 +29,17 @@ Terrain.prototype.draw = function() {
 	ctx.fill();  
 }
 
+Terrain.prototype.collideShip = function(ship) {
+	for(var i=0; i < this.coords.length-1; i++) {
+		var line = [this.coords[i], this.coords[i+1]];
+		var [collided, v] = this.collideLineCircle(line, ship.getCenter(), ship.r);
+		if(collided) {
+			return [collided, v];
+		}
+	}
+	return [false, undefined];
+};
+
 
 // dot product p . q
 // p & q are 2-element arrays
@@ -144,12 +155,14 @@ Terrain.prototype.collideLineCircle = function(l1, c, r) {
 
   // p_close - c
 	var vector_to_c = vectorSub(c, p_close);
-
-  return r >= Math.sqrt(vectorDot(vector_to_c, vector_to_c));
+  return [r >= Math.sqrt(vectorDot(vector_to_c, vector_to_c)), vector_to_c];
 };
 
 function testCollisionLineCircle() {
-	var f = Terrain.prototype.collideLineCircle;
+	var f = function(l1, c, r) { // wrap to simplify asserts below
+		var [c, _] = Terrain.prototype.collideLineCircle(l1,c,r);
+		return c
+	};
   var r = 1;
 	var o = [0,0];
 	var a = [-1,0];
