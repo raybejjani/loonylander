@@ -77,6 +77,17 @@ function bpDrawCircle(x, y, radius, color)
 	ctx.fill();
 }
 
+function bpDrawCollisionLine(l1)
+{
+	var ctx = canv.getContext("2d");
+	ctx.lineWidth = 4;
+	ctx.strokeStyle = "lime";
+	ctx.beginPath();
+	ctx.moveTo(l1[0][0], canv.height-l1[0][1]);
+	ctx.lineTo(l1[1][0], canv.height-l1[1][1]);
+	ctx.closePath();
+	ctx.stroke();
+}
 
 // Add Keyboard up/down event listeners, and have them modify our keystate variables
 window.addEventListener("keydown",function(e)

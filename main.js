@@ -8,6 +8,7 @@ var terrain_height = 20;
 var starting_fuel = 100;
 var crash_speed = 0.8;
 var cheat = false;
+var debug = false;
 
 // Physics
 var gravity = -0.01;
@@ -49,6 +50,7 @@ var ctx = canv.getContext("2d");
 // Objects
 var ship = new Ship(200, 100, 0.5*Math.PI, starting_fuel, canv.getContext("2d"));
 var ground = new Terrain(terrain_height, canv, canv.getContext("2d"));
+var lastCollision = [[0,0],[0,0]];
 
 // Extra handler for pause via "Space"
 window.addEventListener("keydown", function(e) {
@@ -60,6 +62,8 @@ window.addEventListener("keydown", function(e) {
 			run = !run;
 		case "KeyG":
 			cheat = !cheat;
+		case "KeyD":
+			debug = !debug;
 	}
 });
 
@@ -106,6 +110,7 @@ function loop() {
 	ground.draw();
 	ship.draw();
 	if(need_drawLose) drawLose();
+	if(debug) bpDrawCollisionLine(lastCollision);
 }
 
 bpStartGameLoop(loop);

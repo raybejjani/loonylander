@@ -34,6 +34,7 @@ Terrain.prototype.collideShip = function(ship) {
 		var line = [this.coords[i], this.coords[i+1]];
 		var [collided, v] = this.collideLineCircle(line, ship.getCenter(), ship.r);
 		if(collided) {
+	    lastCollision = [this.coords[i], this.coords[i+1]];
 			return [collided, v];
 		}
 	}
