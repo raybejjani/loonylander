@@ -71,7 +71,8 @@ function loop() {
 
   // Ground collision
   var need_drawLose = false;
-	if(ship.y-r <= ground.height){
+  var collision = ground.collideLineCircle([[0,ground.height],[canv.width,ground.height]], [ship.x, ship.y], r)
+	if(collision) {
 		speed = Math.sqrt(ship.vx**2 + ship.vy**2);
 		if(speed > crash_speed) {
 			run = false;
