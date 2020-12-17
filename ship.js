@@ -5,17 +5,17 @@ var ds = 15; // distance between the circles
 
 
 function Ship(x, y, a, fuel, ctx) {
-		this.fuel = fuel;
+	this.fuel = fuel;
 
-		this.x = x;
-		this.y = y;
-		this.a = a;
+	this.x = x;
+	this.y = y;
+	this.a = a;
 	
-		this.vx =  0;
-		this.vy =  0;
-	              
-		this.ctx = ctx;
-		this.color = 'red';
+	this.vx =  0;
+	this.vy =  0;
+	            
+	this.ctx = ctx;
+	this.color = 'red';
 }
 
 var dummy = new Ship(200, 100, 0.5*Math.PI, 0, undefined);
