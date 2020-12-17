@@ -18,7 +18,6 @@ function Ship(x, y, a, fuel, ctx) {
 	this.color = 'red';
 }
 
-var dummy = new Ship(200, 100, 0.5*Math.PI, 0, undefined);
 
 Ship.prototype.draw = function() {
 	// Draw the big circle

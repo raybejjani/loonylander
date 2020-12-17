@@ -7,7 +7,6 @@ function Terrain(height, canv, ctx) {
 	this.color = "beige";
 }
 
-var dummy = new Terrain(0, undefined);
 
 
 Terrain.prototype.draw = function() {
