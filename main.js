@@ -21,14 +21,14 @@ var win_speed = 0.1;
 function drawLose() {
 	var ctx = canv.getContext("2d");
 	ctx.fillStyle = "red";
-	ctx.font = '16px serif';
-	ctx.fillText("Crash!\r\nSuper Sad Spaceship :(", canv.width/4, canv.height/2);
+	ctx.font = '32px serif';
+	ctx.fillText("Crash!\r\nSuper Sad Spaceship :(", canv.width/4-20, canv.height/2);
 }
 
 function drawWin() {
 	var ctx = canv.getContext("2d");
-	ctx.fillStyle = "blue";
-	ctx.font = '16px serif';
+	ctx.fillStyle = "turquoise";
+	ctx.font = '32px serif';
 	ctx.fillText("Yay! The universe is saved!", canv.width/4, canv.height/2);
 }
 
