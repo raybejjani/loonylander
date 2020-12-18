@@ -65,7 +65,7 @@ Ship.prototype.applyCollision = function(v) {
 	this.x += v_offset[0];
 	this.y += v_offset[1];
 
-	speed = Math.sqrt(this.vx**2 + this.vy**2);
+	speed =  0.1 * Math.sqrt(this.vx**2 + this.vy**2);
 	var v_speed =  vectorScale(v_unit, speed);
 
 	// Bounce the ship along the normal vector, retaining some of the
