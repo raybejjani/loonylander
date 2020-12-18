@@ -2,6 +2,7 @@
 var r = 10;  // radius of ship's big main circle
 var rs = 4;  // radius of ship's front small circle
 var ds = 15; // distance between the circles
+var ship_bounce = 1.1;
 
 
 function Ship(x, y, a, fuel, ctx) {
@@ -16,7 +17,9 @@ function Ship(x, y, a, fuel, ctx) {
 	
 	this.vx =  0;
 	this.vy =  0;
-	            
+
+	this.bounce = ship_bounce;
+
 	this.ctx = ctx;
 	this.color = 'red';
 }
@@ -65,10 +68,10 @@ Ship.prototype.applyCollision = function(v) {
 	speed = Math.sqrt(this.vx**2 + this.vy**2);
 	var v_speed =  vectorScale(v_unit, speed);
 
-	// Bounce the ship along the normal vector, retaining 10% of the
-	// velocity
-	this.vx += 1.1*v_speed[0];
-	this.vy += 1.1*v_speed[1];
+	// Bounce the ship along the normal vector, retaining some of the
+	// velocity based on bounce
+	this.vx += this.bounce*v_speed[0];
+	this.vy += this.bounce*v_speed[1];
 }
 
 // runPhysics updates the position based on the current velocity after applying
