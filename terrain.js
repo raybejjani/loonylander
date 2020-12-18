@@ -8,12 +8,12 @@ function Terrain(height, canv, ctx) {
 
 	// start and end at height, create variation in between.
 	// We also include the bottom corners of the canvas.
-	this.coords = [[0,0], [0,this.height]];
-	for(var i=1; i<=10; i++) {
+	this.coords = [];
+	for(var i=0; i<=10; i++) {
 		this.coords.push([i*this.canv.width/10, // 10 parts
-											0.5*(this.height + Math.random()*this.height)]);
+											2*(this.height + Math.random()*this.height)]);
 	}
-	this.coords.push([this.canv.width,this.height], [this.canv.width,0]);
+	this.coords.push([this.canv.width,0], [0,0]);
 }
 
 
