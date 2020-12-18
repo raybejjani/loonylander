@@ -50,6 +50,7 @@ var ctx = canv.getContext("2d");
 // Objects
 var ship = new Ship(200, 100, 0.5*Math.PI, starting_fuel, canv.getContext("2d"));
 var ground = new Terrain(terrain_height, canv, canv.getContext("2d"));
+var landing = new Landing(ground.getLandingSpot(), canv, canv.getContext("2d"));
 var lastCollision = [[0,0],[0,0]];
 
 // Extra handler for pause via "Space"
@@ -81,11 +82,15 @@ function loop() {
 
 	ship.runPhysics(drag_coefficient, 0, gravity);
 
+	// Collisions
 	var need_drawLose = false;
-	// Ground collision
-	var [collision, v] = ground.collideShip(ship)
-	if(collision) {
-		ship.applyCollision(v);
+	var [collisionLanding, vLanding] = landing.collideShip(ship)
+	var [collisionGround, vGround] = ground.collideShip(ship)
+
+	if(collisionLanding) ship.applyCollision(vLanding);
+	if(collisionGround) ship.applyCollision(vGround);
+
+	if(collisionGround || collisionLanding) {
 		if(!cheat && speed > crash_speed) {
 			run = false;
 			need_drawLose = true;
@@ -97,6 +102,7 @@ function loop() {
 	bpClearCanvas();
 
 	drawUI();
+	landing.draw();
 	ground.draw();
 	ship.draw();
 	if(need_drawLose) drawLose();

@@ -41,5 +41,18 @@ Terrain.prototype.collideShip = function(ship) {
 	return [false, undefined];
 };
 
+// getLandingSpot returns a random point on a random segment, suitable to
+// then place a landing pad.
+Terrain.prototype.getLandingSpot = function() {
+	// We want to ignore the segments running along the sides and bottom. This
+	// needs a -2 (see constructor). We also need to leave one final point to
+	// create the segment, so another -1.
+	var segNum = Math.floor(Math.random() * (this.coords.length-3));
 
+	// Make a line, and extract the vector along it, scaling it by [0,1]
+	var line = [this.coords[segNum], this.coords[segNum+1]];
+	var vect = vectorScale(vectorSub(line[1], line[0]), Math.random());
 
+	// Return the point along line if you add vect to the start point.
+	return [line[0][0] + vect[0], line[0][1] + vect[1]]
+}
