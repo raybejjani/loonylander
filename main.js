@@ -60,10 +60,15 @@ window.addEventListener("keydown", function(e) {
 		case "Space":
 			if(!run) window.requestAnimationFrame(loop);
 			run = !run;
+			break;
+
 		case "KeyG":
 			cheat = !cheat;
+			break;
+
 		case "KeyD":
 			debug = !debug;
+			break;
 	}
 });
 
