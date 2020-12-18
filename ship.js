@@ -38,7 +38,7 @@ Ship.prototype.draw = function() {
 
 // applyTurn updates the ships orientation by angle
 Ship.prototype.applyTurn = function(angle) {
-	ship.a+= angle;
+	this.a+= angle;
 };
 
 // applyThrust moves updates the ship's velocity, based on it's angle, only if
