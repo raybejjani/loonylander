@@ -120,3 +120,30 @@ function testCollisionLineCircle() {
 
 	console.log("complete");
 }
+
+
+// find the vector between the centers, if that length is less than the sum
+// of radii, it is a collision
+function collideCircleCircle(c1, r1, c2, r2) {
+	var vect = vectorSub(c2, c1);
+	var distance = Math.sqrt(vectorDot(vect, vect));
+
+	return [distance <= (r1+r2), vect]
+}
+
+function testCollideCircleCircle() {
+	var f = function(c1,r1,c2,r2) { // wrap to simplify asserts below
+		var [c, _] = collideCircleCircle(c1,r1,c2,r2);
+		return c
+	};
+
+	var c1 = [0, 0];
+	var r1 = 1;
+	var c2 = [0,2];
+	var r2 = 1;
+	var c3 = [0,3];
+	var r3 = 1;
+
+	console.assert(f(c1, r1, c2, r2) === true);
+	console.assert(f(c1, r1, c3, r3) === false);
+}

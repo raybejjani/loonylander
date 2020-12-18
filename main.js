@@ -15,6 +15,7 @@ var gravity = -0.01;
 var drag_coefficient = 0.99;
 var thrust_strength = 0.2;
 var turn_strength = 0.05; // radians 
+var meteor_spawn_interval = 2500; // in ms
 
 function drawLose() {
 	var ctx = canv.getContext("2d");
@@ -51,6 +52,7 @@ var ctx = canv.getContext("2d");
 var ship = new Ship(Math.random()*canv.width, canv.height/2 + Math.random()*canv.height/2, 0.5*Math.PI, starting_fuel, canv.getContext("2d"));
 var ground = new Terrain(terrain_height, canv, canv.getContext("2d"));
 var landing = new Landing(ground.getLandingSpot(), canv, canv.getContext("2d"));
+var meteors = [];
 var lastCollision = [[0,0],[0,0]];
 
 // Extra handler for pause via "Space"
@@ -74,15 +76,59 @@ window.addEventListener("keydown", function(e) {
 });
 
 function loop() {
+	var time = new Date().getTime();
+	var needMeteors = time % meteor_spawn_interval; // every so many ms
+	if(-50 < needMeteors && needMeteors < 50) {
+		meteors.push(Meteor.getRandomMeteor());
+	}
+	if (meteors.length > 20) {
+		for(var i in meteors) {
+			var m = meteors[i];
+			if (m.x < 0 || m.x > width || m.y < 0 || m.y > height) {
+				meteors.splice(i, 1);
+			}
+		}
+	}
+
 	/**** Physics updates ****/
 	// Change the angle based on left/right arrow keys
 	if(ksleft)  ship.applyTurn(turn_strength);
 	if(ksright) ship.applyTurn(-turn_strength);
 	if(ksup) ship.applyThrust(thrust_strength);
 
-	ship.runPhysics(drag_coefficient, 0, gravity);
+
 
 	// Collisions
+
+	// Meteor collisions
+	for(var i in meteors) {
+		var m = meteors[i];
+		// ground
+		var [collisionLanding, vLanding] = landing.collideShip(m);
+	  var [collisionGround, vGround] = ground.collideShip(m);
+	  if(collisionLanding) m.applyCollision(vLanding);
+	  if(collisionGround) m.applyCollision(vGround);
+
+		// with the ship
+		var [collisionShip, vShip] = collideCircleCircle(m.getCenter(), m.r, ship.getCenter(), ship.r);
+	 	if(collisionShip) { 
+	 		m.applyCollision(vShip);
+	 		ship.applyCollision(vectorScale(vShip, -1));
+		}
+		
+
+		// each other
+		for(var j=0; j<i; j++) {
+			var o = meteors[j];
+			var [collisionMeteor, vMeteor] = collideCircleCircle(m.getCenter(), m.r, o.getCenter(), o.r);
+	  	if(collisionMeteor) {
+	  		m.applyCollision(vMeteor);
+	 			o.applyCollision(vectorScale(vMeteor, -1));
+			}
+		}
+	}
+
+	// Ground & Landing collisions
 	var need_drawLose = false;
 	var [collisionLanding, vLanding] = landing.collideShip(ship)
 	var [collisionGround, vGround] = ground.collideShip(ship)
@@ -97,14 +143,22 @@ function loop() {
 		}
 	}
 
+	for(var i in meteors) {
+		meteors[i].runPhysics(drag_coefficient, 0, gravity);
+	}
+	ship.runPhysics(drag_coefficient, 0, gravity);
+
 	/**** Drawing ****/
 	// Clear the canvas
 	bpClearCanvas();
 
-	drawUI();
 	landing.draw();
 	ground.draw();
+	for(var i in meteors) {
+		meteors[i].draw();
+	}
 	ship.draw();
+	drawUI();
 	if(need_drawLose) drawLose();
 	if(debug) bpDrawCollisionLine(lastCollision);
 }
