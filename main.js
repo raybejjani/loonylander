@@ -16,12 +16,20 @@ var drag_coefficient = 0.99;
 var thrust_strength = 0.2;
 var turn_strength = 0.05; // radians 
 var meteor_spawn_interval = 2500; // in ms
+var win_speed = 0.1;
 
 function drawLose() {
 	var ctx = canv.getContext("2d");
 	ctx.fillStyle = "red";
 	ctx.font = '16px serif';
 	ctx.fillText("Crash!\r\nSuper Sad Spaceship :(", canv.width/4, canv.height/2);
+}
+
+function drawWin() {
+	var ctx = canv.getContext("2d");
+	ctx.fillStyle = "blue";
+	ctx.font = '16px serif';
+	ctx.fillText("Yay! The universe is saved!", canv.width/4, canv.height/2);
 }
 
 function drawUI() {
@@ -76,6 +84,8 @@ window.addEventListener("keydown", function(e) {
 });
 
 function loop() {
+	var need_drawLose = false;
+	var need_drawWin = false;
 	var time = new Date().getTime();
 	var needMeteors = time % meteor_spawn_interval; // every so many ms
 	if(-50 < needMeteors && needMeteors < 50) {
@@ -114,6 +124,10 @@ function loop() {
 	 	if(collisionShip) { 
 	 		m.applyCollision(vShip);
 	 		ship.applyCollision(vectorScale(vShip, -1));
+			if(!cheat) {
+				run = false;
+				need_drawLose = true;
+			}
 		}
 		
 
@@ -129,12 +143,19 @@ function loop() {
 	}
 
 	// Ground & Landing collisions
-	var need_drawLose = false;
 	var [collisionLanding, vLanding] = landing.collideShip(ship)
 	var [collisionGround, vGround] = ground.collideShip(ship)
 
 	if(collisionLanding) ship.applyCollision(vLanding);
 	if(collisionGround) ship.applyCollision(vGround);
+
+	var speed = ship.getSpeed();
+	if(collisionLanding) {
+		if(speed < win_speed) { 
+			run = false;
+			need_drawWin = true;
+		}
+	}
 
 	if(collisionGround || collisionLanding) {
 		if(!cheat && speed > crash_speed) {
@@ -159,6 +180,7 @@ function loop() {
 	}
 	ship.draw();
 	drawUI();
+	if(need_drawWin) drawWin();
 	if(need_drawLose) drawLose();
 	if(debug) bpDrawCollisionLine(lastCollision);
 }

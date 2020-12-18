@@ -29,6 +29,11 @@ Ship.prototype.getCenter = function() {
 	return [this.x,this.y];
 }
 
+Ship.prototype.getSpeed = function() {
+	var v = [this.vx, this.vy];
+	return Math.sqrt(vectorDot(v,v));
+}
+
 Ship.prototype.draw = function() {
 	// Draw the big circle
 	bpDrawCircle(this.x, this.y, this.r, "red");
