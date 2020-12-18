@@ -48,7 +48,7 @@ var canv = bpMakeCanvas(width, height);
 var ctx = canv.getContext("2d");
 
 // Objects
-var ship = new Ship(200, 100, 0.5*Math.PI, starting_fuel, canv.getContext("2d"));
+var ship = new Ship(Math.random()*canv.width, canv.height/2 + Math.random()*canv.height/2, 0.5*Math.PI, starting_fuel, canv.getContext("2d"));
 var ground = new Terrain(terrain_height, canv, canv.getContext("2d"));
 var landing = new Landing(ground.getLandingSpot(), canv, canv.getContext("2d"));
 var lastCollision = [[0,0],[0,0]];
