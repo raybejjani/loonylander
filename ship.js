@@ -52,6 +52,25 @@ Ship.prototype.applyThrust = function(thrust) {
 	}
 };
 
+
+Ship.prototype.applyCollision = function(v) {
+	// offset the ship by the overlap of the circle and the line.
+	// This is the difference of r and |v| in the direction of v_unit
+	var v_len = Math.sqrt(vectorDot(v,v));
+	var v_unit = vectorScale(v, 1/v_len);
+	var v_offset = vectorScale(v_unit, r - v_len);
+	this.x += v_offset[0];
+	this.y += v_offset[1];
+
+	speed = Math.sqrt(this.vx**2 + this.vy**2);
+	var v_speed =  vectorScale(v_unit, speed);
+
+	// Bounce the ship along the normal vector, retaining 10% of the
+	// velocity
+	this.vx += 1.1*v_speed[0];
+	this.vy += 1.1*v_speed[1];
+}
+
 // runPhysics updates the position based on the current velocity after applying
 // drag and any velocity forcing functions (e.g. gravity).
 Ship.prototype.runPhysics = function(drag, ddx, ddy) {

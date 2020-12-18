@@ -81,26 +81,11 @@ function loop() {
 
 	ship.runPhysics(drag_coefficient, 0, gravity);
 
-  // Ground collision
-  var need_drawLose = false;
-  var [collision, v] = ground.collideShip(ship)
+	var need_drawLose = false;
+	// Ground collision
+	var [collision, v] = ground.collideShip(ship)
 	if(collision) {
-		// offset the ship by the overlap of the circle and the line.
-		// This is the difference of r and |v| in the direction of v_unit
-		var v_len = Math.sqrt(vectorDot(v,v));
-		var v_unit = vectorScale(v, 1/v_len);
-		var v_offset = vectorScale(v_unit, r - v_len);
-		ship.x += v_offset[0];
-		ship.y += v_offset[1];
-
-		speed = Math.sqrt(ship.vx**2 + ship.vy**2);
-		var v_speed =  vectorScale(v_unit, speed);
-
-		// Bounce the ship along the normal vector, retaining 10% of the
-		// velocity
-		ship.vx += 1.1*v_speed[0];
-		ship.vy += 1.1*v_speed[1];
-
+		ship.applyCollision(v);
 		if(!cheat && speed > crash_speed) {
 			run = false;
 			need_drawLose = true;
