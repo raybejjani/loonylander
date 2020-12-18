@@ -28,12 +28,12 @@ Ship.prototype.getCenter = function() {
 
 Ship.prototype.draw = function() {
 	// Draw the big circle
-	bpDrawCircle(this.x, this.y, r, "red");
+	bpDrawCircle(this.x, this.y, this.r, "red");
 
 	// Draw the small circle, offset by the ship's angle
 	var xs = this.x + ds*Math.cos(this.a)
 	var ys = this.y + ds*Math.sin(this.a)
-	bpDrawCircle(xs, ys, rs, "red");
+	bpDrawCircle(xs, ys, this.rs, "red");
 };
 
 // applyTurn updates the ships orientation by angle
@@ -58,7 +58,7 @@ Ship.prototype.applyCollision = function(v) {
 	// This is the difference of r and |v| in the direction of v_unit
 	var v_len = Math.sqrt(vectorDot(v,v));
 	var v_unit = vectorScale(v, 1/v_len);
-	var v_offset = vectorScale(v_unit, r - v_len);
+	var v_offset = vectorScale(v_unit, this.r - v_len);
 	this.x += v_offset[0];
 	this.y += v_offset[1];
 
